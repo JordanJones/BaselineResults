@@ -1,0 +1,55 @@
+{
+  "name": "BaselineResults",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git@github.dell:jordanjones/BaselineResults.git"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "browserify": "^6.3.2",
+    "browserify-shim": "^3.8.0",
+    "del": "^0.1.3",
+    "gulp": "^3.8.10",
+    "gulp-autoprefixer": "^2.0.0",
+    "gulp-bower": "0.0.7",
+    "gulp-cache": "^0.2.4",
+    "gulp-gh-pages": "^0.4.0",
+    "gulp-imagemin": "^2.0.0",
+    "gulp-jshint": "^1.9.0",
+    "gulp-load-plugins": "^0.7.1",
+    "gulp-react": "^2.0.0",
+    "gulp-ruby-sass": "^0.7.1",
+    "gulp-size": "^1.1.0",
+    "gulp-useref": "^1.0.2",
+    "gulp-util": "^3.0.1",
+    "gulp-webserver": "^0.8.7",
+    "react": "^0.12.1",
+    "react-router": "^0.10.2",
+    "reactify": "^0.17.0",
+    "underscore": "^1.7.0",
+    "vinyl-source-stream": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim",
+      [
+        "reactify",
+        {
+          "es6": true
+        }
+      ]
+    ]
+  },
+  "browser": {
+    "jquery": "./app/bower_components/jquery/dist/jquery.js",
+    "d3": "./app/bower_components/d3/d3.js"
+  },
+  "browserify-shim": {
+    "jquery": "$",
+    "chart": "global:d3"
+  }
+}
