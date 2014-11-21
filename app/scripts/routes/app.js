@@ -12,9 +12,13 @@ module.exports = React.createClass({
                         <NavLink to="overview">Overview</NavLink>
                     </ul>
                     <ul className="nav nav-sidebar">
-                        <NavLink to="result" params={{resultName: "blah"}}>Blah</NavLink>
-                        <NavLink to="result" params={{resultName: "foo"}}>Foo</NavLink>
-                        <NavLink to="result" params={{resultName: "bar"}}>Bar</NavLink>
+                        <NavLink to="result" params={{resultName: "WebApiSqlClient"}}>WebApi SqlClient</NavLink>
+                        <NavLink to="result" params={{resultName: "ODataEntityFramework"}}>OData Entity Framework (DB First)</NavLink>
+                        <NavLink to="result" params={{resultName: "ODataEntityFrameworkCodeFirst"}}>OData Entity Framework (Code First)</NavLink>
+                        <NavLink to="result" params={{resultName: "ODataLinq2Db"}}>OData Linq2Db</NavLink>
+                        <NavLink to="result" params={{resultName: "WebApiEntityFramework"}}>WebApi Entity Framework (DB First)</NavLink>
+                        <NavLink to="result" params={{resultName: "WebApiEntityFrameworkCodeFirst"}}>WebApi Entity Framework (Code First)</NavLink>
+                        <NavLink to="result" params={{resultName: "WebApiLinq2Db"}}>WebApi Linq2Db</NavLink>
                     </ul>
                     <ul className="nav nav-sidebar">
                         <NavLink to="summary">Summary</NavLink>

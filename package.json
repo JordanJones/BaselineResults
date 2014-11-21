@@ -46,10 +46,12 @@
   },
   "browser": {
     "jquery": "./app/bower_components/jquery/dist/jquery.js",
-    "d3": "./app/bower_components/d3/d3.js"
+    "d3": "./app/bower_components/d3/d3.js",
+    "dg": "./app/bower_components/metrics-graphics/js/metricsgraphics.min.js"
   },
   "browserify-shim": {
     "jquery": "$",
-    "chart": "global:d3"
+    "chart": "global:d3",
+    "dg": "global:charts"
   }
 }
