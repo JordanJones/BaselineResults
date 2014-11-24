@@ -8,6 +8,7 @@ var $ = require('gulp-load-plugins')();
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var resultify = require('./tools/resultify');
+var summarizer = require('./tools/summarizer');
 
 
 // Styles
@@ -65,6 +66,14 @@ gulp.task('results', function() {
 });
 
 
+// Summarizer
+gulp.task('summarize', function() {
+    return gulp.src('dist/data/**/Results.json')
+        .pipe(summarizer())
+        .pipe(gulp.dest('dist/data'))
+        .pipe($.size());
+});
+
 
 // Clean
 gulp.task('clean', function (cb) {
@@ -73,7 +82,7 @@ gulp.task('clean', function (cb) {
 
 
 // Bundle
-gulp.task('bundle', ['styles', 'scripts', 'bower', 'results'], function(){
+gulp.task('bundle', ['styles', 'scripts', 'bower', 'results', 'summarize'], function(){
     var assets = $.useref.assets();
 
     return gulp.src('./app/*.html')
