@@ -1,7 +1,8 @@
 'use strict';
 
 var gulp = require('gulp'),
-    del = require('del');
+    del = require('del'),
+    path = require('path');
 
 // Plugins
 var $ = require('gulp-load-plugins')();
@@ -10,6 +11,7 @@ var source = require('vinyl-source-stream');
 var resultify = require('./tools/resultify');
 var summarizer = require('./tools/summarizer');
 
+var deployCacheDir = path.resolve(path.join(__dirname, '..', 'BaselineResults_GhPages'));
 
 // Styles
 gulp.task('styles', function () {
@@ -87,7 +89,7 @@ gulp.task('bundle', ['styles', 'scripts', 'bower', 'results'], function(){
 // Deploy
 gulp.task('deploy', function() {
     return gulp.src('./dist/**/*')
-        .pipe($.ghPages());
+        .pipe($.ghPages({cacheDir: deployCacheDir}));
 });
 
 // Build

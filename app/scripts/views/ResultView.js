@@ -2,22 +2,7 @@
 var React = require('react');
 var _ = require('underscore');
 var ResourceUsageChart = require('../components/charts/ResourceUsage');
-
-var CPU_COLS = function () {
-    return {
-        x: ['x'],
-        iis: ['IIS Cpu'],
-        sql: ['SqlServer Cpu']
-    };
-};
-
-var MEM_COLS = function () {
-    return {
-        x: ['x'],
-        iis: ['IIS Memory'],
-        sql: ['SqlServer Memory']
-    };
-};
+var ResultData = require('../models/resultData');
 
 module.exports = React.createClass({
 
@@ -27,7 +12,7 @@ module.exports = React.createClass({
     },
 
     getInitialState: function () {
-        return {perfData: {}};
+        return {perfData: new ResultData({})};
     },
 
     componentDidMount: function () {
@@ -40,19 +25,9 @@ module.exports = React.createClass({
 
     _loadDataOrUpdateCharts: function () {
         var perfName = this.props.name;
-        if (this.state.perfData[perfName]) {
-            var perfData = this.state.perfData;
-            if (perfData[perfName] && perfData[perfName].parsed && perfData[perfName].parsed.cpu && perfData[perfName].parsed.mem) {
-                this._updateCharts(perfData[perfName].original.name, perfData[perfName].parsed.cpu, perfData[perfName].parsed.mem);
-            }
-            else {
-                perfData[perfName].parsed = this._processPerfData(perfData[perfName].original);
-                this._setPerfData(perfData);
-            }
-        }
-        else {
-            this._loadPerfData();
-        }
+        this.state.perfData.load(perfName, 'data/' + perfName + '/Results.json?bust=' + (new Date()).getTime())
+            .then(_.bind(this.state.perfData.process, this.state.perfData))
+            .then(this._updateReports);
     },
 
     render: function() {
@@ -67,99 +42,30 @@ module.exports = React.createClass({
         );
     },
 
-    _setPerfData: function(data) {
-        var initialData = this.getInitialState();
-        initialData.perfData = data;
-        this.setState(initialData);
-    },
-
-    _loadPerfData: function () {
-        var perfName = this.props.name;
-        var This = this;
-        var url = 'data/' + perfName + '/Results.json?bust=' + (new Date()).getTime();
-        $.get(url, function (data) {
-            if (data == null) {
-                return;
-            }
-            var perfData = This.state.perfData;
-            perfData[perfName] = {
-                original: data,
-                parsed: null
-            };
-            This._setPerfData(perfData);
-        })
-            .fail(function () {});
-    },
-
-    _updateCharts: function (name, cpuData, memData) {
+    _updateReports: function (reportData) {
+        var chartData = reportData.parsed;
         this.refs.cpuChart.setState({
             data: {
                 columns: [
-                    cpuData.x,
-                    cpuData.iis,
-                    cpuData.sql
+                    chartData.cpu.x,
+                    chartData.cpu.iis,
+                    chartData.cpu.sql
                 ],
-                label: name
+                label: chartData.name
             },
             render: true
         });
         this.refs.memChart.setState({
             data: {
                 columns: [
-                    memData.x,
-                    memData.iis,
-                    memData.sql
+                    chartData.mem.x,
+                    chartData.mem.iis,
+                    chartData.mem.sql
                 ],
-                label: name
+                label: chartData.name
             },
             render: true
         });
-    },
-
-    _processPerfData: function (data) {
-        var cpuCols = CPU_COLS();
-        var memCols = MEM_COLS();
-
-        var This = this;
-
-        var perfData = data.summary.perf;
-
-        _.each(perfData, function (o) {
-            var d = This._processDataSlice(o);
-
-            var id = d.id;
-            cpuCols.x.push(id);
-            memCols.x.push(id);
-
-            cpuCols.iis.push(d.iisCpu);
-            memCols.iis.push(d.iisMem);
-
-            cpuCols.sql.push(d.sqlCpu);
-            memCols.sql.push(d.sqlMem);
-        });
-
-        return {
-            cpu: cpuCols,
-            mem: memCols
-        };
-    },
-
-    _processDataSlice: function (o) {
-        return {
-            id: o.id,
-            iisCpu: o.iisCpu.toPrecision(3),
-            sqlCpu: o.sqlCpu.toPrecision(3),
-            iisMem: this._bytesToSize(o.iisMem),
-            sqlMem: this._bytesToSize(o.sqlMem)
-        };
-    },
-
-    _bytesToSize: function (bytes) {
-        if (bytes == 0) return bytes;
-        var k = 1024;
-        var i = Math.floor(Math.log(bytes) / Math.log(k));
-        return (bytes / Math.pow(k, i)).toPrecision(5);
-        //return bytes;
     }
 
 });

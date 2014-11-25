@@ -4,7 +4,7 @@ var React = require('react');
 var Router = require('react-router');
 var {Route, RouteHandler} = Router;
 var CategoryNav = require('../components/categorynav');
-var data = require('../models/navigationData');
+var NavData = require('../models/navigationData');
 
 var Sidebar = React.createClass({
 
@@ -12,20 +12,21 @@ var Sidebar = React.createClass({
 
     renderItem: function(item, idx) {
         var itemProps = {
-            name: item.name,
-            title: item.title
+            name: item.name.getValue(),
+            title: item.title.getValue()
         };
 
+        var route = item.route.getValue();
         var isActive = this.isActive(
-            item.route,
-            item.route === 'Result' ? itemProps : null,
+            route,
+            route === 'Result' ? itemProps : null,
             null);
 
         return <CategoryNav
             key={idx}
             defaultIsActive={isActive}
             params={itemProps}
-            route={item.route}
+            route={route}
             title={itemProps.title}
             />;
     },
@@ -46,7 +47,7 @@ var App = React.createClass({
     render: function () {
         return (
             <div className="row">
-                <Sidebar categories={data} />
+                <Sidebar categories={NavData} />
                 <div className="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                     <RouteHandler />
                 </div>
