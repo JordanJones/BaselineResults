@@ -61,14 +61,6 @@ gulp.task('images', function () {
 gulp.task('results', function() {
     return gulp.src('results/**/*.csv', {buffer: false})
         .pipe(resultify())
-        .pipe(gulp.dest('dist/data'))
-        .pipe($.size());
-});
-
-
-// Summarizer
-gulp.task('summarize', function() {
-    return gulp.src('dist/data/**/Results.json')
         .pipe(summarizer())
         .pipe(gulp.dest('dist/data'))
         .pipe($.size());
@@ -82,7 +74,7 @@ gulp.task('clean', function (cb) {
 
 
 // Bundle
-gulp.task('bundle', ['styles', 'scripts', 'bower', 'results', 'summarize'], function(){
+gulp.task('bundle', ['styles', 'scripts', 'bower', 'results'], function(){
     var assets = $.useref.assets();
 
     return gulp.src('./app/*.html')

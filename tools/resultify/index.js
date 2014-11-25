@@ -64,7 +64,7 @@ module.exports = function(data, options) {
                         cwd: file.cwd,
                         path: path.join(file.base, dirName, 'Results.json')
                     });
-                    resultFile.contents = new Buffer(JSON.stringify(results, null, ' '));
+                    resultFile.contents = new Buffer(JSON.stringify(results));
                     cb(null, resultFile);
                 });
         }

@@ -4,8 +4,7 @@ var React = require('react');
 
 module.exports = React.createClass({
 
-    render: function ()
-    {
+    render: function () {
         return (
             <h1 className="page-header">Overview</h1>
         );

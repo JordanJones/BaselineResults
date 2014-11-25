@@ -25,7 +25,7 @@
     "gulp-util": "^3.0.1",
     "gulp-webserver": "^0.8.7",
     "react": "^0.12.1",
-    "react-router": "^0.10.2",
+    "react-router": "^0.11.2",
     "reactify": "^0.17.0",
     "underscore": "^1.7.0",
     "vinyl-source-stream": "^1.0.0"
@@ -47,11 +47,10 @@
   "browser": {
     "jquery": "./app/bower_components/jquery/dist/jquery.js",
     "d3": "./app/bower_components/d3/d3.js",
-    "dg": "./app/bower_components/metrics-graphics/js/metricsgraphics.min.js"
+    "c3": "./app/bower_components/c3/c3.js"
   },
   "browserify-shim": {
     "jquery": "$",
-    "chart": "global:d3",
-    "dg": "global:charts"
+    "d3": "global:d3"
   }
 }

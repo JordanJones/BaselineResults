@@ -22,12 +22,12 @@ module.exports = function () {
                 .reduce(ReducePerfSummary, [])
                 .value();
 
-            data.summary = {
+            data['summary'] = {
                 http: httpSummary,
                 perf: perfSummary
             };
 
-            file.contents = new Buffer(JSON.stringify(data, null, ' '));
+            file.contents = new Buffer(JSON.stringify(data));
             cb(null, file);
         }
         catch (err) {

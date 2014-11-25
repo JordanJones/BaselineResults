@@ -1,6 +1,9 @@
 /** @jsx React.DOM */
 
 var React = window.React = require('react');
-var Router = require('./router');
+var Router = require('react-router');
+var routes = require('./routes');
 
-React.render(Router, document.getElementById('app-host'));
+Router.run(routes, function (Handler) {
+    React.render(<Handler />, document.getElementById('app-host'));
+});
