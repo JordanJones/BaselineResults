@@ -1,7 +1,8 @@
 {
     "name": "ODataEntityFrameworkCodeFirst",
     "http": [
-        {"reqs": 52.76, "total": 189941, "latency": {"avg": 231.56, "std": 173.72, "max": 1510}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 0}}
+        {"reqs": 52.76, "total": 189941, "latency": {"avg": 231.56, "std": 173.72, "max": 1510}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 0}},
+        {"reqs": 50.40, "total": 181459, "latency": {"avg": 245.80, "std": 200.88, "max": 1640}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 0}}
     ],
     "perf": []
 }

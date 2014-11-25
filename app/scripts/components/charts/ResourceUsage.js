@@ -3,7 +3,6 @@
 var React = require('react');
 var _ = require('underscore');
 var c3 = require('c3');
-var Chart = require('chartjs');
 
 module.exports = React.createClass({
 
@@ -38,89 +37,39 @@ module.exports = React.createClass({
     },
 
     _renderGraphic: function () {
-        //var chart = c3.generate({
-        //    axis: {
-        //        x: {
-        //            show: false
-        //        }
-        //    },
-        //    bindto: '#' + this.props.objectId,
-        //    data: {
-        //        x: 'x',
-        //        columns: this.state.data.columns,
-        //        type: 'spline'
-        //    },
-        //    point: {
-        //        show: false
-        //    },
-        //    subchart: {
-        //        show: false
-        //    },
-        //    tooltip: {
-        //        show: false
-        //    },
-        //    zoom: {
-        //        enabled: false
-        //    }
-        //});
-
-        //var data = {
-        //    labels: _.rest(this.state.data.columns[0]),
-        //    datasets: [
-        //        {
-        //            label: _.first(this.state.data.columns[1]),
-        //            data: _.rest(this.state.data.columns[1])
-        //        }
-        //    ]
-        //};
-        //
-        //console.log ('Data: %o', data);
-        //
-        //var ctx = document.getElementById(this.props.objectId).getContext('2d');
-        //var chart = new Chart(ctx).Line(data, {pointDot: false, datasetFill: false});
-
-        var data = {
-            type: 'line',
-            series: [
-                {
-                    //label: _.first(this.state.data.columns[1]),
-                    values: _.rest(this.state.data.columns[1])
-                },
-                {
-                    //label: _.first(this.state.data.columns[2]),
-                    values: _.rest(this.state.data.columns[2])
+        var chart = c3.generate({
+            axis: {
+                x: {
+                    show: true
                 }
-            ]
-        };
+            },
+            bindto: '#' + this.props.objectId,
+            data: {
+                x: 'x',
+                columns: this.state.data.columns,
+                type: 'spline'
+            },
+            grid: {
+                x: {
+                    lines: false,
+                    show: false
+                }
+            },
+            point: {
+                show: false
+            },
+            subchart: {
+                show: false
+            },
+            tooltip: {
+                show: true
+            },
+            zoom: {
+                enabled: false
+            }
+        });
 
-        //$('#' + this.props.objectId).kendoChart({
-        //    //categoryAxis: {
-        //    //    categories: _.rest(this.state.data.columns[0]),
-        //    //    majorGridLines: {
-        //    //        visible: false
-        //    //    },
-        //    //    majorTicks: {
-        //    //        visible: false
-        //    //    }
-        //    //},
-        //    legend: {
-        //        position: "bottom",
-        //        visible: true
-        //    },
-        //    seriesDefaults: {
-        //        type: 'line',
-        //        style: 'smooth',
-        //        markers: {
-        //            visible: false
-        //        }
-        //    },
-        //    series: data,
-        //    tooltip: {
-        //        visible: true
-        //    }
-        //});
-
-        //this.setState({chart: chart, render: false});
+        this.setState({chart: chart, render: false});
     }
 
 });
