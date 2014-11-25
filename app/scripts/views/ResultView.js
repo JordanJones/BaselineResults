@@ -76,7 +76,7 @@ module.exports = React.createClass({
     _loadPerfData: function () {
         var perfName = this.props.name;
         var This = this;
-        var url = '/data/' + perfName + '/Results.json?bust=' + (new Date()).getTime();
+        var url = 'data/' + perfName + '/Results.json?bust=' + (new Date()).getTime();
         $.get(url, function (data) {
             if (data == null) {
                 return;
