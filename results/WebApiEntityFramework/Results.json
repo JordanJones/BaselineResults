@@ -1,4 +1,7 @@
 {
-    "http": [],
+    "name": "WebApiEntityFramework",
+    "http": [
+        {"reqs": 88.27, "total": 317783, "latency": {"avg": 333.20, "std": 494.10, "max": 2250}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 1}}
+    ],
     "perf": []
 }
