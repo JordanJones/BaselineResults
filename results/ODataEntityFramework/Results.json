@@ -1,4 +1,6 @@
 {
-    "http": [],
+    "http": [
+        {"reqs": 52.66, "total": 189614, "latency": {"avg": 230.88, "std": 174.47, "max": 1560}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 0}}
+    ],
     "perf": []
 }
