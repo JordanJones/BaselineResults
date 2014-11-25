@@ -76,7 +76,8 @@ var PERFSUMMARY = {
     trans: 0,
     conns: 0,
     poolConn: 0,
-    activeConn: 0
+    activeConn: 0,
+    ts: ''
 };
 
 function ReducePerfSummary(ctx, item, idx) {
@@ -85,6 +86,9 @@ function ReducePerfSummary(ctx, item, idx) {
             ctx[elIdx] = _.clone(PERFSUMMARY);
         }
 
+        if (!ctx[elIdx].ts) {
+            ctx[elIdx].ts = el.ts;
+        }
         ctx[elIdx].id = elIdx;
         ctx[elIdx].iisMem = (ctx[elIdx].iisMem + el.iisMem) / (idx + 1);
         ctx[elIdx].iisCpu = (ctx[elIdx].iisCpu + el.iisCpu) / (idx + 1);

@@ -3,7 +3,7 @@
 var React = require('react');
 var Router = require('react-router');
 
-var ResourceUsageChart = require('../components/charts/ResourceUsage');
+var View = require('../views/ResultView');
 
 module.exports = React.createClass({
 
@@ -11,12 +11,7 @@ module.exports = React.createClass({
 
     render: function() {
         var params = this.getParams();
-        return (
-            <div>
-                <h1 className="page-header">{params.title}</h1>
-                <ResourceUsageChart data={params.name} />
-            </div>
-        );
+        return (<View title={params.title} name={params.name} />);
     }
 
 });

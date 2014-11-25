@@ -4,94 +4,45 @@ var React = require('react');
 var _ = require('underscore');
 var c3 = require('c3');
 
+var chartCache = {};
+
 module.exports = React.createClass({
 
-    _chart: null,
-
-    propTypes: {
-        data: React.PropTypes.oneOfType([
-            React.PropTypes.array,
-            React.PropTypes.string
-        ]),
-        chart: React.PropTypes.object
-    },
-
-    getDefaultProps: function () {
+    getInitialState: function () {
         return {
-            data: [],
-            chart: {destroy: function () {}}
+            data: null
         };
     },
 
-    componentDidMount: function () {
-        if (this.isMounted()) {
-            this._loadDataOrRenderGraphic();
-        }
+    componentDidUpdate: function (prevProps, prevState) {
+        this._renderGraphic();
     },
 
-    componentDidUpdate: function() {
-        if (this._chart && this._chart.destroy) {
-            this._chart.destroy();
-        }
-        this._loadDataOrRenderGraphic();
+    componentWillUnmount: function () {
+        this._tryClearCache();
     },
 
     render: function() {
         return (
-            <div id="chart" className="resourceChart">
-            </div>
+            <div id={this.props.objectId} className="resourceChart"></div>
         );
     },
 
-    _loadDataOrRenderGraphic: function() {
+    _tryClearCache: function () {
+        var id = this.props.objectId;
 
-        var data = this.props.data;
-
-        if (!_.isArray(data)) {
-            var This = this;
-            d3.json('/data/' + data + '/Results.json', function (data) {
-                var perfData = [];
-                if (data == null) {
-                    perfData = testData();
-                }
-                else {
-                    perfData = _.map(data.summary.perf, function (o) {
-                        return {
-                            id: o.id,
-                            x: o.id,
-                            y: o.iisCpu,
-                            sql: o.sqlCpu
-                        };
-                    });
-                }
-                This._renderGraphic(perfData);
-            });
-            //data = testData();
+        if (chartCache[id] && chartCache[id].destroy) {
+            chartCache[id].destroy();
         }
-        else {
-            this._renderGraphic(data);
-        }
+        return id;
     },
 
-    _renderGraphic: function (data) {
-
-        var columns = [
-            ['x'],
-            ['IIS Cpu'],
-            ['SQL Cpu']
-        ];
-        _.each(data, function (o, idx) {
-            if (idx > 0 && (idx % 5) != 0) return;
-            columns[0].push(o.x)
-            columns[1].push(o.y)
-            columns[2].push(o.sql)
-        });
-
-        this._chart = c3.generate({
-            bindTo: '#resourceChart',
+    _renderGraphic: function () {
+        var id = this._tryClearCache();
+        var chart = c3.generate({
             data: {
                 x: 'x',
-                columns: columns,
+                columns: this.state.data,
                 type: 'spline'
             },
             point: {
@@ -109,6 +60,9 @@ module.exports = React.createClass({
                 }
             }
         });
+
+        $(this.getDOMNode()).empty().append(chart.element);
+        chartCache[id] = chart;
     }
 
 });
