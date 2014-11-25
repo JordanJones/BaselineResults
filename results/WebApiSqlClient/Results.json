@@ -1,4 +1,5 @@
 {
+    "name": "WebApiSqlClient",
     "http": [
         {"reqs": 121.52, "total": 437497, "latency": {"avg": 555.40, "std": 742.41, "max": 2620}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 3}},
         {"reqs": 121.62, "total": 437896, "latency": {"avg": 590.82, "std": 888.74, "max": 2690}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 1}},

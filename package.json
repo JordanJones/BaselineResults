@@ -47,7 +47,8 @@
   "browser": {
     "jquery": "./app/bower_components/jquery/dist/jquery.js",
     "d3": "./app/bower_components/d3/d3.js",
-    "c3": "./app/bower_components/c3/c3.js"
+    "c3": "./app/bower_components/c3/c3.js",
+    "chartjs": "./app/bower_components/chartjs/Chart.js"
   },
   "browserify-shim": {
     "jquery": "$",

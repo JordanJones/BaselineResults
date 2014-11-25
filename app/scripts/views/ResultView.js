@@ -3,52 +3,37 @@ var React = require('react');
 var _ = require('underscore');
 var ResourceUsageChart = require('../components/charts/ResourceUsage');
 
-//var CPU_COLS = [
-//    ['x'],
-//    ['IIS Cpu #1'],
-//    ['IIS Cpu #2'],
-//    ['IIS Cpu #3'],
-//    ['SqlServer Cpu #1'],
-//    ['SqlServer Cpu #2'],
-//    ['SqlServer Cpu #3']
-//];
-var CPU_COLS = {
-    x: ['x'],
-    iis: [
-        ['IIS Cpu #1'],
-        ['IIS Cpu #2'],
-        ['IIS Cpu #3']
-    ],
-    sql: [
-        ['SqlServer Cpu #1'],
-        ['SqlServer Cpu #2'],
-        ['SqlServer Cpu #3']
-    ]
+var CPU_COLS = function () {
+    return {
+        x: ['x'],
+        iis: [
+            ['IIS Cpu #1'],
+            ['IIS Cpu #2'],
+            ['IIS Cpu #3']
+        ],
+        sql: [
+            ['SqlServer Cpu #1'],
+            ['SqlServer Cpu #2'],
+            ['SqlServer Cpu #3']
+        ]
+    };
 };
 
-var MEM_COLS = {
-    x: ['x'],
-    iis: [
-        ['IIS Memory #1'],
-        ['IIS Memory #2'],
-        ['IIS Memory #3']
-    ],
-    sql: [
-        ['SqlServer Memory #1'],
-        ['SqlServer Memory #2'],
-        ['SqlServer Memory #3']
-    ]
+var MEM_COLS = function () {
+    return {
+        x: ['x'],
+        iis: [
+            ['IIS Memory #1'],
+            ['IIS Memory #2'],
+            ['IIS Memory #3']
+        ],
+        sql: [
+            ['SqlServer Memory #1'],
+            ['SqlServer Memory #2'],
+            ['SqlServer Memory #3']
+        ]
+    };
 };
-
-//var MEM_COLS = [
-//    ['x'],
-//    ['IIS Memory #1'],
-//    ['IIS Memory #2'],
-//    ['IIS Memory #3'],
-//    ['SqlServer Memory #1'],
-//    ['SqlServer Memory #2'],
-//    ['SqlServer Memory #3']
-//];
 
 module.exports = React.createClass({
 
@@ -57,12 +42,33 @@ module.exports = React.createClass({
         name: React.PropTypes.string.isRequired
     },
 
+    getInitialState: function () {
+        return {perfData: {}};
+    },
+
     componentDidMount: function () {
-        this._loadPerfData();
+        this._loadDataOrUpdateCharts();
     },
 
     componentDidUpdate: function () {
-        this._loadPerfData();
+        this._loadDataOrUpdateCharts();
+    },
+
+    _loadDataOrUpdateCharts: function () {
+        var perfName = this.props.name;
+        if (this.state.perfData[perfName]) {
+            var perfData = this.state.perfData;
+            if (perfData[perfName] && perfData[perfName].parsed && perfData[perfName].parsed.cpu && perfData[perfName].parsed.mem) {
+                this._updateCharts(perfData[perfName].original.name, perfData[perfName].parsed.cpu, perfData[perfName].parsed.mem);
+            }
+            else {
+                perfData[perfName].parsed = this._processPerfData(perfData[perfName].original);
+                this._setPerfData(perfData);
+            }
+        }
+        else {
+            this._loadPerfData();
+        }
     },
 
     render: function() {
@@ -77,69 +83,95 @@ module.exports = React.createClass({
         );
     },
 
-    _loadPerfData: function () {
-        var This = this;
-        $.get('/data/' + this.props.name + '/Results.json?bust=' + (new Date()).getTime(), This._onPerfData)
-            .fail(function () {This._onPerfData(null)});
+    _setPerfData: function(data) {
+        var initialData = this.getInitialState();
+        initialData.perfData = data;
+        this.setState(initialData);
     },
 
-    _onPerfData: function (data) {
-        var cpuCols = _.clone(CPU_COLS);
-        var memCols = _.clone(MEM_COLS);
-
-        if (data != null) {
-            var This = this;
-
-            for (var i = 0; i < 1; i++) {
-                var perfData = _.first(data.perf[i], 230);
-
-                _.each(perfData, function (o) {
-                    //if (idx > 0 && (idx % 10) != 0) return;
-                    //i = idx;
-                    var d = This._processDataSlice(o);
-
-                    if (i == 0) {
-                        cpuCols.x.push(d.id);
-                        memCols.x.push(d.id);
-                    }
-
-                    cpuCols.iis[i].push(d.iisCpu);
-                    memCols.iis[i].push(d.iisMem);
-
-                    cpuCols.sql[i].push(d.sqlCpu);
-                    memCols.sql[i].push(d.sqlMem);
-                });
+    _loadPerfData: function () {
+        var perfName = this.props.name;
+        var This = this;
+        var url = '/data/' + perfName + '/Results.json?bust=' + (new Date()).getTime();
+        console.log('Fetching data for %s', url);
+        $.get(url, function (data) {
+            if (data == null) {
+                return;
             }
-            //if (i < (perfData.length - 2)) {
-            //    var d = this._processDataSlice(perfData[perfData.length - 1]);
-            //    cpuCols[0].push(d.id);
-            //    memCols[0].push(d.id);
-            //
-            //    cpuCols[1].push(d.iisCpu);
-            //    cpuCols[2].push(d.sqlCpu);
-            //    memCols[1].push(d.iisMem);
-            //    memCols[2].push(d.sqlMem);
-            //}
+            var perfData = This.state.perfData;
+            perfData[perfName] = {
+                original: data,
+                parsed: null
+            };
+            This._setPerfData(perfData);
+        })
+            .fail(function () {});
+    },
+
+    _updateCharts: function (name, cpuData, memData) {
+        this.refs.cpuChart.setState({
+            data: {
+                columns: [
+                    cpuData.x,
+                    cpuData.iis[0],
+                    //cpuData.iis[1],
+                    //cpuData.iis[2],
+                    cpuData.sql[0],
+                    //cpuData.sql[1],
+                    //cpuData.sql[2]
+                ],
+                label: name
+            },
+            render: true
+        });
+        this.refs.memChart.setState({
+            data: {
+                columns: [
+                    memData.x,
+                    memData.iis[0],
+                    //memData.iis[1],
+                    //memData.iis[2],
+                    memData.sql[0],
+                    //memData.sql[1],
+                    //memData.sql[2]
+                ],
+                label: name
+            },
+            render: true
+        });
+    },
+
+    _processPerfData: function (data) {
+        var cpuCols = CPU_COLS();
+        var memCols = MEM_COLS();
+
+        var This = this;
+
+        for (var i = 0; i < 1; i++) {
+            var perfData = _.first(data.perf[i], 1800);
+
+            _.each(perfData, function (o) {
+                //if (idx > 0 && (idx % 10) != 0) return;
+                //i = idx;
+                var d = This._processDataSlice(o);
+
+                if (i == 0) {
+                    cpuCols.x.push(d.id);
+                    memCols.x.push(d.id);
+                }
+
+                cpuCols.iis[i].push(d.iisCpu);
+                memCols.iis[i].push(d.iisMem);
+
+                cpuCols.sql[i].push(d.sqlCpu);
+                memCols.sql[i].push(d.sqlMem);
+            });
         }
 
-        this.refs.cpuChart.replaceState({data: [
-            cpuCols.x,
-            cpuCols.iis[0],
-            //cpuCols.iis[1],
-            //cpuCols.iis[2],
-            cpuCols.sql[0],
-            //cpuCols.sql[1],
-            //cpuCols.sql[2]
-        ]});
-        this.refs.memChart.replaceState({data: [
-            memCols.x,
-            memCols.iis[0],
-            //memCols.iis[1],
-            //memCols.iis[2],
-            memCols.sql[0],
-            //memCols.sql[1],
-            //memCols.sql[2]
-        ]});
+        return {
+            cpu: cpuCols,
+            mem: memCols
+        };
     },
 
     _processDataSlice: function (o) {

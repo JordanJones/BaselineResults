@@ -3,66 +3,124 @@
 var React = require('react');
 var _ = require('underscore');
 var c3 = require('c3');
-
-var chartCache = {};
+var Chart = require('chartjs');
 
 module.exports = React.createClass({
 
     getInitialState: function () {
         return {
-            data: null
+            data: null,
+            chart: null,
+            render: true
         };
     },
 
-    componentDidUpdate: function (prevProps, prevState) {
-        this._renderGraphic();
+    componentWillUpdate: function (nextProps, nextState) {
+        if (this.state.chart != null && nextState.render) {
+            this.state.chart.destroy();
+        }
+    },
+
+    componentDidUpdate: function () {
+        if (this.state.render && _.isObject(this.state.data) && _.isArray(this.state.data.columns)) {
+            this._renderGraphic();
+        }
     },
 
     componentWillUnmount: function () {
-        this._tryClearCache();
+        if (this.state.chart != null) {
+            this.state.chart.destroy();
+        }
     },
 
     render: function() {
-        return (
-            <div id={this.props.objectId} className="resourceChart"></div>
-        );
-    },
-
-    _tryClearCache: function () {
-        var id = this.props.objectId;
-
-        if (chartCache[id] && chartCache[id].destroy) {
-            chartCache[id].destroy();
-        }
-        return id;
+        return (<div id={this.props.objectId} className="resourceChart"></div>);
     },
 
     _renderGraphic: function () {
-        var id = this._tryClearCache();
-        var chart = c3.generate({
-            data: {
-                x: 'x',
-                columns: this.state.data,
-                type: 'spline'
-            },
-            point: {
-                show: false
-            },
-            subchart: {
-                show: false
-            },
-            zoom: {
-                enabled: true
-            },
-            axis: {
-                x: {
-                    show: false
-                }
-            }
-        });
+        //var chart = c3.generate({
+        //    axis: {
+        //        x: {
+        //            show: false
+        //        }
+        //    },
+        //    bindto: '#' + this.props.objectId,
+        //    data: {
+        //        x: 'x',
+        //        columns: this.state.data.columns,
+        //        type: 'spline'
+        //    },
+        //    point: {
+        //        show: false
+        //    },
+        //    subchart: {
+        //        show: false
+        //    },
+        //    tooltip: {
+        //        show: false
+        //    },
+        //    zoom: {
+        //        enabled: false
+        //    }
+        //});
 
-        $(this.getDOMNode()).empty().append(chart.element);
-        chartCache[id] = chart;
+        //var data = {
+        //    labels: _.rest(this.state.data.columns[0]),
+        //    datasets: [
+        //        {
+        //            label: _.first(this.state.data.columns[1]),
+        //            data: _.rest(this.state.data.columns[1])
+        //        }
+        //    ]
+        //};
+        //
+        //console.log ('Data: %o', data);
+        //
+        //var ctx = document.getElementById(this.props.objectId).getContext('2d');
+        //var chart = new Chart(ctx).Line(data, {pointDot: false, datasetFill: false});
+
+        var data = {
+            type: 'line',
+            series: [
+                {
+                    //label: _.first(this.state.data.columns[1]),
+                    values: _.rest(this.state.data.columns[1])
+                },
+                {
+                    //label: _.first(this.state.data.columns[2]),
+                    values: _.rest(this.state.data.columns[2])
+                }
+            ]
+        };
+
+        //$('#' + this.props.objectId).kendoChart({
+        //    //categoryAxis: {
+        //    //    categories: _.rest(this.state.data.columns[0]),
+        //    //    majorGridLines: {
+        //    //        visible: false
+        //    //    },
+        //    //    majorTicks: {
+        //    //        visible: false
+        //    //    }
+        //    //},
+        //    legend: {
+        //        position: "bottom",
+        //        visible: true
+        //    },
+        //    seriesDefaults: {
+        //        type: 'line',
+        //        style: 'smooth',
+        //        markers: {
+        //            visible: false
+        //        }
+        //    },
+        //    series: data,
+        //    tooltip: {
+        //        visible: true
+        //    }
+        //});
+
+        //this.setState({chart: chart, render: false});
     }
 
 });
