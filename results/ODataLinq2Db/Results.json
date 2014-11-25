@@ -2,7 +2,8 @@
     "name": "ODataLinq2Db",
     "http": [
         {"reqs": 76.29, "total": 274667, "latency": {"avg": 166.95, "std": 193.09, "max": 2590}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 1}},
-        {"reqs": 67.94, "total": 244611, "latency": {"avg": 204.68, "std": 233.47, "max": 2230}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 0}}
+        {"reqs": 67.94, "total": 244611, "latency": {"avg": 204.68, "std": 233.47, "max": 2230}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 0}},
+        {"reqs": 76.90, "total": 276858, "latency": {"avg": 162.87, "std": 168.91, "max": 2150}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 0}}
     ],
     "perf": []
 }
