@@ -137,4 +137,7 @@ gulp.task('watch', ['html', 'bundle', 'serve'], function () {
 
     // Watch image files
     gulp.watch('app/images/**/*', ['images']);
+
+    // Watch tool files
+    gulp.watch('tools/summarizer/index.js', ['results']);
 });

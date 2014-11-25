@@ -40,7 +40,11 @@ module.exports = React.createClass({
         var chart = c3.generate({
             axis: {
                 x: {
-                    show: true
+                    label: 'Seconds',
+                    show: true,
+                    tick: {
+                        fit: false
+                    }
                 }
             },
             bindto: '#' + this.props.objectId,

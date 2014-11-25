@@ -146,8 +146,8 @@ module.exports = React.createClass({
     _processDataSlice: function (o) {
         return {
             id: o.id,
-            iisCpu: o.iisCpu,
-            sqlCpu: o.sqlCpu,
+            iisCpu: o.iisCpu.toPrecision(3),
+            sqlCpu: o.sqlCpu.toPrecision(3),
             iisMem: this._bytesToSize(o.iisMem),
             sqlMem: this._bytesToSize(o.sqlMem)
         };
@@ -155,9 +155,10 @@ module.exports = React.createClass({
 
     _bytesToSize: function (bytes) {
         if (bytes == 0) return bytes;
-        var k = 1000;
+        var k = 1024;
         var i = Math.floor(Math.log(bytes) / Math.log(k));
-        return (bytes / Math.pow(k, i)).toPrecision(3);
+        return (bytes / Math.pow(k, i)).toPrecision(5);
+        //return bytes;
     }
 
 });

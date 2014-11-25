@@ -77,12 +77,14 @@ var PERFSUMMARY = {
     ts: ''
 };
 
+var SMA_VALUE = 10;
+
 function ReducePerfSummary(items, ctx) {
     var size = _.chain(items)
         .map(function (x) { return _.size(x);})
         .max()
         .value();
-    var total = Math.ceil((size / 30));
+    var total = Math.ceil((size / SMA_VALUE));
     var nums = _.range(total);
 
     var chunks = _.chain(nums)
@@ -91,8 +93,8 @@ function ReducePerfSummary(items, ctx) {
 
     _.each(items, function (item) {
             _.each(nums, function (i) {
-                var offset = (i * 30);
-                var count = offset + 30;
+                var offset = (i * SMA_VALUE);
+                var count = offset + SMA_VALUE;
 
                 Array.prototype.push.apply(chunks[i], item.slice(offset, Math.min(count, size)));
             });
@@ -105,7 +107,7 @@ function ReducePerfSummary(items, ctx) {
         var size = c.length;
         var r = ctx[idx];
 
-        r.id = (idx * 30);
+        r.id = (idx * SMA_VALUE);
         r.iisMem = _.reduce(c, function (x, y) { return x + y.iisMem; }, 0) / size;
         r.iisCpu = _.reduce(c, function (x, y) { return x + y.iisCpu; }, 0) / size;
         r.sqlMem = _.reduce(c, function (x, y) { return x + y.sqlMem; }, 0) / size;
