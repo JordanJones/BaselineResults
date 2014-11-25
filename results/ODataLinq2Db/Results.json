@@ -1,4 +1,7 @@
 {
-    "http": [],
+    "name": "ODataLinq2Db",
+    "http": [
+        {"reqs": 76.29, "total": 274667, "latency": {"avg": 166.95, "std": 193.09, "max": 2590}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 1}}
+    ],
     "perf": []
 }
