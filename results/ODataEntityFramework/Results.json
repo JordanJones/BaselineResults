@@ -1,7 +1,8 @@
 {
     "http": [
         {"reqs": 52.66, "total": 189614, "latency": {"avg": 230.88, "std": 174.47, "max": 1560}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 0}},
-        {"reqs": 53.76, "total": 193545, "latency": {"avg": 243.27, "std": 214.51, "max": 1400}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 0}}
+        {"reqs": 53.76, "total": 193545, "latency": {"avg": 243.27, "std": 214.51, "max": 1400}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 0}},
+        {"reqs": 54.28, "total": 195439, "latency": {"avg": 225.97, "std": 182.12, "max": 1710}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 0}}
     ],
     "perf": []
 }
