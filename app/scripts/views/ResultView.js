@@ -61,8 +61,8 @@ module.exports = React.createClass({
         return (
             <div>
                 <h1 className="page-header">{this.props.title}</h1>
-                <ResourceUsageChart objectId={cpuId} ref="cpuChart" />
-                <ResourceUsageChart objectId={memId} ref="memChart" />
+                <ResourceUsageChart chartId={cpuId} yLabel="Percent" xLabel="Time" ref="cpuChart" />
+                <ResourceUsageChart chartId={memId} yLabel="MB" xLabel="Time" ref="memChart" />
             </div>
         );
     },
@@ -127,8 +127,9 @@ module.exports = React.createClass({
         _.each(perfData, function (o) {
             var d = This._processDataSlice(o);
 
-            cpuCols.x.push(d.id);
-            memCols.x.push(d.id);
+            var id = d.id;
+            cpuCols.x.push(id);
+            memCols.x.push(id);
 
             cpuCols.iis.push(d.iisCpu);
             memCols.iis.push(d.iisMem);
