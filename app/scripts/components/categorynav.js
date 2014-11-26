@@ -31,7 +31,7 @@ module.exports = React.createClass({
 
     render: function () {
         return (
-            <li className={this.buildClassName()}>
+            <li className={this.buildClassName()} role="presentation">
                 <Link to={this.props.route}
                     params={this.props.params}>{this.props.title}</Link>
             </li>

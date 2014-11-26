@@ -7,11 +7,38 @@ var gulp = require('gulp'),
 // Plugins
 var $ = require('gulp-load-plugins')();
 var browserify = require('browserify');
+var reactify = require('reactify');
+var watchify = require('watchify');
 var source = require('vinyl-source-stream');
 var resultify = require('./tools/resultify');
 var summarizer = require('./tools/summarizer');
 
 var deployCacheDir = path.resolve(path.join(__dirname, '..', 'BaselineResults_GhPages'));
+
+var scriptsTask = function (options) {
+    var isDebug = ($.util.env.type !== 'production');
+
+    var appBundler = browserify({
+        entries: ['./app/scripts/main.js'],
+        transform: [reactify],
+        debug: isDebug,
+        cache: {},
+        packageCache: {},
+        fullPaths: true
+    });
+
+    (isDebug ? ['react', 'react/addons'] : []).forEach(function (o) { appBundler.external(o)});
+
+    var rebundle = function () {
+        var start = Date.now();
+        $.util.log('Building App Bundle');
+        appBundler.bundle()
+            .on('error', $.util.log)
+            .pipe(source('app.js'))
+            .pipe($.if(!isDebug, $.streamify($.uglify())))
+            .pipe()
+    };
+};
 
 // Styles
 gulp.task('styles', function () {
@@ -25,12 +52,11 @@ gulp.task('styles', function () {
 });
 
 
-
-
-
 // Scripts
 gulp.task('scripts', function () {
-    return browserify('./app/scripts/main.js')
+
+
+    return browserify('./app/scripts/main.js'/*, {debug: ($.util.env.type !== 'production')}*/)
         .bundle()
         .pipe(source('app.js'))
         .pipe(gulp.dest('dist/scripts'))
@@ -71,7 +97,17 @@ gulp.task('results', function() {
 
 // Clean
 gulp.task('clean', function (cb) {
-    del(['dist/styles', 'dist/scripts', 'dist/images', 'dist/data'], cb);
+    del(
+        [
+            'dist/index.html',
+            'dist/bower_components',
+            'dist/styles',
+            'dist/scripts',
+            'dist/images',
+            'dist/data'
+        ],
+        cb
+    );
 });
 
 

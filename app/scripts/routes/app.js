@@ -2,7 +2,7 @@
 
 var React = require('react');
 var Router = require('react-router');
-var {Route, RouteHandler} = Router;
+var {Route, RouteHandler, Link, Navigation} = Router;
 var CategoryNav = require('../components/categorynav');
 var NavData = require('../models/navigationData');
 
@@ -12,11 +12,11 @@ var Sidebar = React.createClass({
 
     renderItem: function(item, idx) {
         var itemProps = {
-            name: item.name.getValue(),
-            title: item.title.getValue()
+            name: item.name,
+            title: item.title
         };
 
-        var route = item.route.getValue();
+        var route = item.route;
         var isActive = this.isActive(
             route,
             route === 'Result' ? itemProps : null,
@@ -34,7 +34,7 @@ var Sidebar = React.createClass({
     render: function () {
         return (
             <div className="col-sm-3 col-md-2 sidebar">
-                <ul className="nav nav-sidebar">
+                <ul className="nav nav-pills nav-stacked">
                     {this.props.categories.map(this.renderItem)}
                 </ul>
             </div>
@@ -43,6 +43,20 @@ var Sidebar = React.createClass({
 });
 
 var App = React.createClass({
+
+    mixins: [Navigation],
+
+    componentDidMount: function () {
+        $(document.body).on('click', '#project-link', this.routeToApp);
+    },
+
+    componentWillUnmount: function () {
+        $(document.body).off('click', '#project-link');
+    },
+
+    routeToApp: function () {
+        this.transitionTo('App');
+    },
 
     render: function () {
         return (

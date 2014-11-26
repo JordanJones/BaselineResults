@@ -5,5 +5,6 @@ var Router = require('react-router');
 var routes = require('./routes');
 
 Router.run(routes, function (Handler) {
-    React.render(<Handler />, document.getElementById('app-host'));
+    React.render(<Handler />, document.body);
+    //React.render(<Handler />, document.getElementById('app-host'));
 });

@@ -1,30 +1,27 @@
 /** @jsx React.DOM */
 
 var React = require('react');
-var _ = require('underscore');
 var c3 = require('c3');
 var moment = require('moment');
 
 module.exports = React.createClass({
 
+    propTypes: {
+        chartId: React.PropTypes.string.isRequired,
+        data: React.PropTypes.object.isRequired
+    },
+
     getInitialState: function () {
         return {
-            data: null,
-            chart: null,
-            render: true
+            chart: null
         };
     },
 
-    componentWillUpdate: function (nextProps, nextState) {
-        if (this.state.chart != null && nextState.render) {
+    componentWillReceiveProps: function (props){
+        if (this.state.chart != null) {
             this.state.chart.destroy();
         }
-    },
-
-    componentDidUpdate: function () {
-        if (this.state.render && _.isObject(this.state.data) && _.isArray(this.state.data.columns)) {
-            this._renderGraphic();
-        }
+        this._renderGraphic(props);
     },
 
     componentWillUnmount: function () {
@@ -37,11 +34,11 @@ module.exports = React.createClass({
         return (<div id={this.props.chartId} className="resourceChart"></div>);
     },
 
-    _renderGraphic: function () {
+    _renderGraphic: function (props) {
         var chart = c3.generate({
             axis: {
                 x: {
-                    label: this.props.xLabel,
+                    label: props.xLabel,
                     show: true,
                     tick: {
                         fit: false,
@@ -51,13 +48,13 @@ module.exports = React.createClass({
                     }
                 },
                 y: {
-                    label: this.props.yLabel
+                    label: props.yLabel
                 }
             },
-            bindto: '#' + this.props.chartId,
+            bindto: '#' + props.chartId,
             data: {
                 x: 'x',
-                columns: this.state.data.columns,
+                columns: props.data.columns,
                 type: 'spline'
             },
             grid: {
@@ -80,7 +77,7 @@ module.exports = React.createClass({
             }
         });
 
-        this.setState({chart: chart, render: false});
+        this.setState({chart: chart});
     }
 
 });
