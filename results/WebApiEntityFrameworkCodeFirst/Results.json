@@ -1,7 +1,8 @@
 {
     "name": "WebApiEntityFrameworkCodeFirst",
     "http": [
-        {"reqs": 88.95, "total": 320260, "latency": {"avg": 428.65, "std": 651.57, "max": 2330}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 2}}
+        {"reqs": 88.95, "total": 320260, "latency": {"avg": 428.65, "std": 651.57, "max": 2330}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 2}},
+        {"reqs": 89.94, "total": 323794, "latency": {"avg": 475.00, "std": 691.75, "max": 2390}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 0}}
     ],
     "perf": []
 }
