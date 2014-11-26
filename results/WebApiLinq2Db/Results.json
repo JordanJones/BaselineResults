@@ -1,7 +1,8 @@
 {
     "name": "WebApiLinq2Db",
     "http": [
-        {"reqs": 121.50, "total": 437441, "latency": {"avg": 604.27, "std": 1350, "max": 4550}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 3}}
+        {"reqs": 121.50, "total": 437441, "latency": {"avg": 604.27, "std": 1350, "max": 4550}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 3}},
+        {"reqs": 118.98, "total": 428368, "latency": {"avg": 589.48, "std": 876.76, "max": 2350}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 0}}
     ],
     "perf": []
 }
