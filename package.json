@@ -5,6 +5,38 @@
     "type": "git",
     "url": "git@github.dell:jordanjones/BaselineResults.git"
   },
+  "browserify": {
+    "transform": [
+      "browserify-shim",
+      [
+        "reactify",
+        {
+          "es6": true
+        }
+      ]
+    ],
+    "cache": {},
+    "packageCache": {},
+    "fullPaths": true
+  },
+  "browser": {
+    "bootstrap": "./app/bower_components/bootstrap/dist/js/bootstrap.js",
+    "c3": "./app/bower_components/c3/c3.js",
+    "d3": "./app/bower_components/d3/d3.js",
+    "jasny-bootstrap": "./app/bower_components/jasny-bootstrap/dist/js/jasny-bootstrap.js",
+    "jquery": "./app/bower_components/jquery/dist/jquery.js"
+  },
+  "browserify-shim": {
+    "d3": {
+      "exports": "d3"
+    },
+    "c3": {
+      "exports": "c3",
+      "depends": [
+        "d3"
+      ]
+    }
+  },
   "dependencies": {
     "moment": "^2.8.4",
     "react": "^0.12.1",
@@ -27,7 +59,6 @@
     "gulp-react": "^2.0.0",
     "gulp-ruby-sass": "^0.7.1",
     "gulp-size": "^1.1.0",
-    "gulp-sourcemaps": "^1.2.8",
     "gulp-streamify": "0.0.5",
     "gulp-uglify": "^1.0.1",
     "gulp-useref": "^1.0.2",
@@ -39,25 +70,5 @@
   },
   "engines": {
     "node": ">=0.10.0"
-  },
-  "browserify": {
-    "transform": [
-      "browserify-shim",
-      [
-        "reactify",
-        {
-          "es6": true
-        }
-      ]
-    ]
-  },
-  "browser": {
-    "jquery": "./app/bower_components/jquery/dist/jquery.js",
-    "d3": "./app/bower_components/d3/d3.js",
-    "c3": "./app/bower_components/c3/c3.js"
-  },
-  "browserify-shim": {
-    "jquery": "$",
-    "d3": "global:d3"
   }
 }

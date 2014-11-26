@@ -5,39 +5,18 @@ var gulp = require('gulp'),
     path = require('path');
 
 // Plugins
-var $ = require('gulp-load-plugins')();
-var browserify = require('browserify');
-var reactify = require('reactify');
-var watchify = require('watchify');
+var $ = require('gulp-load-plugins')({lazy: false});
 var source = require('vinyl-source-stream');
+var browserify = require('browserify');
+var watchify = require('watchify');
 var resultify = require('./tools/resultify');
 var summarizer = require('./tools/summarizer');
 
 var deployCacheDir = path.resolve(path.join(__dirname, '..', 'BaselineResults_GhPages'));
 
-var scriptsTask = function (options) {
-    var isDebug = ($.util.env.type !== 'production');
-
-    var appBundler = browserify({
-        entries: ['./app/scripts/main.js'],
-        transform: [reactify],
-        debug: isDebug,
-        cache: {},
-        packageCache: {},
-        fullPaths: true
-    });
-
-    (isDebug ? ['react', 'react/addons'] : []).forEach(function (o) { appBundler.external(o)});
-
-    var rebundle = function () {
-        var start = Date.now();
-        $.util.log('Building App Bundle');
-        appBundler.bundle()
-            .on('error', $.util.log)
-            .pipe(source('app.js'))
-            .pipe($.if(!isDebug, $.streamify($.uglify())))
-            .pipe()
-    };
+var buildOptions = {
+    dev: true,
+    watch: false
 };
 
 // Styles
@@ -54,12 +33,28 @@ gulp.task('styles', function () {
 
 // Scripts
 gulp.task('scripts', function () {
+    var params = {
+        debug: buildOptions.dev === true,
+        cache: {},
+        packageCache: {},
+        fullPaths: true
+    };
 
+    var bundler = browserify('./app/scripts/AppMain.js', params);
+    (buildOptions.dev === true ? ['react', 'react/addons'] : []).forEach(function (o) { bundler.external(o)});
 
-    return browserify('./app/scripts/main.js'/*, {debug: ($.util.env.type !== 'production')}*/)
-        .bundle()
-        .pipe(source('app.js'))
-        .pipe(gulp.dest('dist/scripts'))
+    function rebundle () {
+        return bundler.bundle()
+            .pipe(source('AppMain.js'))
+            .pipe($.if(buildOptions.dev !== true, $.streamify($.uglify())))
+            .pipe(gulp.dest('dist/scripts'));
+    }
+
+    if (buildOptions.watch === true) {
+        bundler = watchify(bundler, watchify.args);
+        bundler.on('update', rebundle);
+    }
+    return rebundle();
 });
 
 
@@ -99,20 +94,28 @@ gulp.task('results', function() {
 gulp.task('clean', function (cb) {
     del(
         [
+            'dist/images',
             'dist/index.html',
             'dist/bower_components',
             'dist/styles',
             'dist/scripts',
-            'dist/images',
             'dist/data'
         ],
         cb
     );
 });
 
+// Build Mode
+gulp.task('watchmode', function () {
+    buildOptions.watch = true;
+});
+gulp.task('prodmode', function () {
+    buildOptions.dev = false;
+});
+
 
 // Bundle
-gulp.task('bundle', ['styles', 'scripts', 'bower', 'results'], function(){
+gulp.task('bundle', ['styles', 'scripts', 'results'], function(){
     var assets = $.useref.assets();
 
     return gulp.src('./app/*.html')
@@ -123,7 +126,7 @@ gulp.task('bundle', ['styles', 'scripts', 'bower', 'results'], function(){
 });
 
 // Deploy
-gulp.task('deploy', function() {
+gulp.task('deploy', ['clean', 'prodmode', 'html', 'bundle', 'images'], function() {
     return gulp.src('./dist/**/*')
         .pipe($.ghPages({cacheDir: deployCacheDir}));
 });
@@ -143,13 +146,6 @@ gulp.task('serve', function () {
         }));
 });
 
-// Bower helper
-gulp.task('bower', function() {
-    gulp.src('app/bower_components/**/*.js', {base: 'app/bower_components'})
-        .pipe(gulp.dest('dist/bower_components/'));
-
-});
-
 gulp.task('json', function() {
     gulp.src('app/scripts/json/**/*.json', {base: 'app/scripts'})
         .pipe(gulp.dest('dist/scripts/'));
@@ -157,7 +153,7 @@ gulp.task('json', function() {
 
 
 // Watch
-gulp.task('watch', ['html', 'bundle', 'serve'], function () {
+gulp.task('watch', ['watchmode', 'html', 'bundle', 'serve'], function () {
 
     // Watch .json files
     gulp.watch('app/scripts/**/*.json', ['json']);
@@ -169,13 +165,11 @@ gulp.task('watch', ['html', 'bundle', 'serve'], function () {
     // Watch .scss files
     gulp.watch('app/styles/**/*.scss', ['styles']);
 
-
-    // Watch .js files
-    gulp.watch('app/scripts/**/*.js', ['scripts']);
-
     // Watch image files
     gulp.watch('app/images/**/*', ['images']);
 
     // Watch tool files
     gulp.watch('tools/summarizer/index.js', ['results']);
+
+    // Don't watch JS files as this happens automatically
 });
