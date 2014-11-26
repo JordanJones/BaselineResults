@@ -1,4 +1,7 @@
 {
-    "http": [],
+    "name": "WebApiLinq2Db",
+    "http": [
+        {"reqs": 121.50, "total": 437441, "latency": {"avg": 604.27, "std": 1350, "max": 4550}, "errors": {"connect": 0, "read": 0, "write": 0, "timeout": 3}}
+    ],
     "perf": []
 }
