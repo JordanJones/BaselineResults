@@ -7460,4 +7460,22 @@ body {
   background-color: #222;
 }
 
+.container-centering {
+  display: table;
+  padding: 0;
+  width: 100%;
+}
+
+.centering {
+  float: none;
+  width: 300px;
+  margin: 0 auto;
+}
+
+@media (max-width: 480px) {
+  .centering {
+    width: 100%;
+  }
+}
+
 /*# sourceMappingURL=main.css.map */
