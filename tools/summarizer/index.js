@@ -17,7 +17,11 @@ module.exports = function () {
                 .reduce(ReduceHttpSummary, HTTPSUMMARY)
                 .value();
 
-            var perfSummary = ReducePerfSummary(data.perf, []);
+            var perfSummary = ReducePerfSummary(data.perf, {
+                values: [],
+                avgCpu: {iis: 0, sql: 0},
+                avgMem: {iis: 0, sql: 0}
+            });
 
             data['summary'] = {
                 http: httpSummary,
@@ -80,6 +84,8 @@ var PERFSUMMARY = {
 var SMA_VALUE = 10;
 
 function ReducePerfSummary(items, ctx) {
+    AveragePerfData(items, ctx);
+
     var size = _.chain(items)
         .map(function (x) { return _.size(x);})
         .max()
@@ -101,11 +107,11 @@ function ReducePerfSummary(items, ctx) {
         });
 
     _.each(chunks, function (c, idx) {
-        if (!_.isArray(ctx[idx])) {
-            ctx[idx] = _.clone(PERFSUMMARY);
+        if (!_.isArray(ctx.values[idx])) {
+            ctx.values[idx] = _.clone(PERFSUMMARY);
         }
         var size = c.length;
-        var r = ctx[idx];
+        var r = ctx.values[idx];
 
         r.id = (idx * SMA_VALUE);
         r.iisMem = _.reduce(c, function (x, y) { return x + y.iisMem; }, 0) / size;
@@ -115,27 +121,14 @@ function ReducePerfSummary(items, ctx) {
     });
 
     return ctx;
+}
 
-    //gutil.log('\tIdx: ', idx);
-    //
-    //_.each(chunks, function (el, elIdx) {
-    //    if (!_.isArray(ctx[elIdx])) {
-    //        ctx[elIdx] = _.clone(PERFSUMMARY);
-    //    }
-    //
-    //    if (!ctx[elIdx].ts) {
-    //        ctx[elIdx].ts = el.ts;
-    //    }
-    //    ctx[elIdx].id = elIdx;
-    //    ctx[elIdx].iisMem = (ctx[elIdx].iisMem + el.iisMem) / (idx + 1);
-    //    ctx[elIdx].iisCpu = (ctx[elIdx].iisCpu + el.iisCpu) / (idx + 1);
-    //    ctx[elIdx].sqlMem = (ctx[elIdx].sqlMem + el.sqlMem) / (idx + 1);
-    //    ctx[elIdx].sqlCpu = (ctx[elIdx].sqlCpu + el.sqlCpu) / (idx + 1);
-    //    ctx[elIdx].trans = (ctx[elIdx].trans + el.trans) / (idx + 1);
-    //    ctx[elIdx].conns = (ctx[elIdx].conns + el.conns) / (idx + 1);
-    //    ctx[elIdx].poolConn = (ctx[elIdx].poolConn + el.poolConn) / (idx + 1);
-    //    ctx[elIdx].activeConn = (ctx[elIdx].activeConn + el.activeConn) / (idx + 1);
-    //});
-    //
-    //return ctx;
+function AveragePerfData(items, ctx) {
+    var c = _.flatten(items);
+    var size = c.length;
+
+    ctx.avgMem.iis = _.reduce(c, function (x, y) { return x + y.iisMem; }, 0) / size;
+    ctx.avgCpu.iis = _.reduce(c, function (x, y) { return x + y.iisCpu; }, 0) / size;
+    ctx.avgMem.sql = _.reduce(c, function (x, y) { return x + y.sqlMem; }, 0) / size;
+    ctx.avgCpu.sql = _.reduce(c, function (x, y) { return x + y.sqlCpu; }, 0) / size;
 }

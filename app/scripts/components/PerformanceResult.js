@@ -4,48 +4,42 @@ var React = require('react');
 
 module.exports = React.createClass({
 
-    getInitialState: function () {
+    getDefaultProps: function() {
         return {
-            data: null
+            data: {requests: 0}
         };
     },
 
     render: function() {
         return (
-            <table>
-                <tbody>
-                    <tr>
-                        <td>Requests/second</td>
-                        <td className="active">value</td>
-
-                        <td></td>
-                        <td className="active">value</td>
-
-                        <td>Latency Average</td>
-                        <td className="active">value</td>
-                    </tr>
-                    <tr>
-                        <td>Total Requests</td>
-                        <td className="active">value</td>
-
-                        <td></td>
-                        <td className="active">value</td>
-
-                        <td>Latency Stdev</td>
-                        <td className="active">value</td>
-                    </tr>
-                    <tr>
-                        <td>Requests/second</td>
-                        <td className="active">value</td>
-
-                        <td></td>
-                        <td className="active">value</td>
-
-                        <td>Latency Max</td>
-                        <td className="active">value</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div className="well well-sm container-fluid">
+                <h1 className="text-center">{this.props.data.requests} <small>requests per second</small></h1>
+                <div className="row">
+                    <div className="col-xs-6 col-xs-offset-3">
+                    <table className="table table-bordered table-compact average-container">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Average Cpu %</th>
+                                <th>Average Memory</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>IIS</td>
+                                <td>{this.props.data.iis.avgCpu}</td>
+                                <td>{this.props.data.iis.avgMem}</td>
+                            </tr>
+                            <tr>
+                                <td>SQL</td>
+                                <td>{this.props.data.sql.avgCpu}</td>
+                                <td>{this.props.data.sql.avgMem}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
         );
     }
 

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-    baseName: 'App',
+    baseName: 'Overview',
     routes: [
         {route: 'Overview', name: 'Overview', title: 'Overview'},
         {route: 'Result', name: 'WebApiSqlClient', title: 'WebApi SqlClient'},

@@ -34,24 +34,25 @@ module.exports = React.createClass({
         var memId = this.props.name + '-memChart';
         return (
             <div>
-                <h1 className="page-header">{this.props.title}</h1>
-                <div className="performanceSection">
-                    <PerformanceResult
-                        data={this.state.data}
-                    />
+                <div className="page-header">
+                    <h1>{this.props.title}</h1>
                 </div>
-                <div header="Cpu Graph" className="performanceSection">
-                    <ResourceUsageChart chartId={cpuId}
-                        data={this.state.data.cpu}
-                        yLabel="Percent"
-                        xLabel="Time"/>
-                </div>
-                <div header="Memory Graph"className="performanceSection">
-                    <ResourceUsageChart chartId={memId}
-                        data={this.state.data.mem}
-                        yLabel="MB"
-                        xLabel="Time"/>
-                </div>
+                <PerformanceResult
+                    data={this.state.summary} />
+
+                <ResourceUsageChart
+                    heading="Cpu Graph"
+                    chartId={cpuId}
+                    data={this.state.cpu}
+                    yLabel="Percent"
+                    xLabel="Time"/>
+
+                <ResourceUsageChart
+                    heading="Memory Graph"
+                    chartId={memId}
+                    data={this.state.mem}
+                    yLabel="MB"
+                    xLabel="Time"/>
             </div>
         );
     }

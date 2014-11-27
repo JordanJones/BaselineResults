@@ -8,6 +8,9 @@ var moment = require('moment');
 module.exports = React.createClass({
 
     propTypes: {
+        heading: React.PropTypes.string.isRequired,
+        xLabel: React.PropTypes.string.isRequired,
+        yLabel: React.PropTypes.string.isRequired,
         chartId: React.PropTypes.string.isRequired,
         data: React.PropTypes.object.isRequired
     },
@@ -32,7 +35,15 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        return (<div id={this.props.chartId} className="resourceChart"></div>);
+        var panelId = this.props.chartId + "-panel";
+        return (
+            <div id={panelId} className="panel panel-default">
+                <div className="panel-heading">{this.props.heading}</div>
+                <div className="panel-body">
+                    <div id={this.props.chartId}></div>
+                </div>
+            </div>
+        );
     },
 
     _renderGraphic: function (props) {
@@ -54,9 +65,12 @@ module.exports = React.createClass({
             },
             bindto: '#' + props.chartId,
             data: {
-                x: 'x',
-                columns: props.data.columns,
-                type: 'spline'
+                json: props.data.values,
+                keys: {
+                    x: 'instance',
+                    value: ['iis', 'sql']
+                },
+                type: 'line'
             },
             grid: {
                 x: {
@@ -65,7 +79,8 @@ module.exports = React.createClass({
                 }
             },
             point: {
-                show: false
+                show: false,
+                r: 1
             },
             subchart: {
                 show: false
@@ -78,6 +93,7 @@ module.exports = React.createClass({
             }
         });
 
+        console.log('Generated');
         this.setState({chart: chart});
     }
 
