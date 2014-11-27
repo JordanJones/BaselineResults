@@ -12,31 +12,33 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <div className="well well-sm container-fluid">
+            <div className="well well-sm">
                 <h1 className="text-center">{this.props.data.requests} <small>requests per second</small></h1>
-                <div className="row">
-                    <div className="col-xs-6 col-xs-offset-3">
-                    <table className="table table-bordered table-compact average-container">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Average Cpu %</th>
-                                <th>Average Memory</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>IIS</td>
-                                <td>{this.props.data.iis.avgCpu}</td>
-                                <td>{this.props.data.iis.avgMem}</td>
-                            </tr>
-                            <tr>
-                                <td>SQL</td>
-                                <td>{this.props.data.sql.avgCpu}</td>
-                                <td>{this.props.data.sql.avgMem}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div className="container">
+                    <div className="row row-centering">
+                        <div className="centering">
+                            <table className="table table-bordered table-compact average-container">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Average Cpu %</th>
+                                        <th>Average Memory</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>IIS</td>
+                                        <td>{this.props.data.iis.avgCpu}</td>
+                                        <td>{this.props.data.iis.avgMem}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>SQL</td>
+                                        <td>{this.props.data.sql.avgCpu}</td>
+                                        <td>{this.props.data.sql.avgMem}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
