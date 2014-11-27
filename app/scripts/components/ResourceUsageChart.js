@@ -93,7 +93,6 @@ module.exports = React.createClass({
             }
         });
 
-        console.log('Generated');
         this.setState({chart: chart});
     }
 

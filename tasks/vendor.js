@@ -46,7 +46,6 @@ gulp.task('vendor', function () {
         .pipe($.if(buildOptions.dev === true, $.sourcemaps.init({loadMaps: true})))
         .pipe($.if(buildOptions.dev !== true, $.streamify($.uglify())))
         .pipe($.if(buildOptions.dev === true, $.sourcemaps.write('./')))
-        .pipe($.if(buildOptions.dev !== true, $.streamify($.uglify())))
         .pipe(gulp.dest('dist/scripts'));
 });
 

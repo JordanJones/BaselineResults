@@ -137,7 +137,7 @@ gulp.task('default', ['clean'], function() {
 });
 
 // Deploy
-gulp.task('deploy', ['prodmode', 'default'], function() {
+gulp.task('deploy', ['prodmode', 'clean', 'build'], function() {
     gulp.src('./dist/**/*')
         .pipe($.ghPages({cacheDir: deployCacheDir}));
 });
