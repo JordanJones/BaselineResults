@@ -25,6 +25,14 @@ module.exports = React.createClass({
             <div className="overview-container">
 
                 <div className="container-fluid">
+
+                    <div className="row code-row">
+
+                        <div className="col-md-3">Base Repository</div>
+                        <div className="col-md-8 code-link"><a href="https://github.com/JordanJones/Baseline/">github.com/JordanJones/Baseline/</a></div>
+
+                    </div>
+
                     <div className="row code-row">
 
                         <div className="col-md-3">Resource Monitor Command</div>
@@ -79,58 +87,6 @@ GO
 
                     </div>
 
-                </div>
-                <div className="container-fluid">
-
-                    <div className="row code-row">
-
-                        <div className="col-md-3">Base Repository</div>
-                        <div className="col-md-8 code-link"><a href="https://github.com/JordanJones/Baseline/">github.com/JordanJones/Baseline/</a></div>
-
-                    </div>
-
-                    <div className="row code-row">
-
-                        <div className="col-md-3">WebApi SqlClient</div>
-                        <div className="col-md-8 code-link"><a href="https://github.com/JordanJones/Baseline/tree/master/src/WebApiSqlClient">github.com/JordanJones/Baseline/tree/master/src/WebApiSqlClient</a></div>
-
-                    </div>
-                    <div className="row code-row">
-
-                        <div className="col-md-3">OData Entity Framework (DB First)</div>
-                        <div className="col-md-8 code-link"><a href="https://github.com/JordanJones/Baseline/tree/master/src/ODataEntityFramework">github.com/JordanJones/Baseline/tree/master/src/ODataEntityFramework</a></div>
-
-                    </div>
-                    <div className="row code-row">
-
-                        <div className="col-md-3">OData Entity Framework (Code First)</div>
-                        <div className="col-md-8 code-link"><a href="https://github.com/JordanJones/Baseline/tree/master/src/ODataEntityFrameworkCodeFirst">github.com/JordanJones/Baseline/tree/master/src/ODataEntityFrameworkCodeFirst</a></div>
-
-                    </div>
-                    <div className="row code-row">
-
-                        <div className="col-md-3">OData Linq2Db</div>
-                        <div className="col-md-8 code-link"><a href="https://github.com/JordanJones/Baseline/tree/master/src/ODataLinq2Db">github.com/JordanJones/Baseline/tree/master/src/ODataLinq2Db</a></div>
-
-                    </div>
-                    <div className="row code-row">
-
-                        <div className="col-md-3">WebApi Entity Framework (DB First)</div>
-                        <div className="col-md-8 code-link"><a href="https://github.com/JordanJones/Baseline/tree/master/src/WebApiEntityFramework">github.com/JordanJones/Baseline/tree/master/src/WebApiEntityFramework</a></div>
-
-                    </div>
-                    <div className="row code-row">
-
-                        <div className="col-md-3">WebApi Entity Framework (Code First)</div>
-                        <div className="col-md-8 code-link"><a href="https://github.com/JordanJones/Baseline/tree/master/src/WebApiEntityFrameworkCodeFirst">github.com/JordanJones/Baseline/tree/master/src/WebApiEntityFrameworkCodeFirst</a></div>
-
-                    </div>
-                    <div className="row code-row">
-
-                        <div className="col-md-3">WebApi Linq2Db</div>
-                        <div className="col-md-8 code-link"><a href="https://github.com/JordanJones/Baseline/tree/master/src/WebApiLinq2Db">github.com/JordanJones/Baseline/tree/master/src/WebApiLinq2Db</a></div>
-
-                    </div>
                 </div>
             </div>
         );
