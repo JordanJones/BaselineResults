@@ -83,7 +83,7 @@ var PERFSUMMARY = {
     ts: ''
 };
 
-var SMA_VALUE = 10;
+var SMA_VALUE = 3;
 
 function ReducePerfSummary(items, ctx) {
     AveragePerfData(items, ctx);
