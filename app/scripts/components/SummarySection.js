@@ -11,10 +11,16 @@ module.exports = React.createClass({
     propTypes: {
         sectionId: React.PropTypes.string.isRequired,
         heading: React.PropTypes.string.isRequired,
+        showY: React.PropTypes.bool,
         items: React.PropTypes.array.isRequired,
         itemLoader: React.PropTypes.func.isRequired,
         stateLoader: React.PropTypes.func.isRequired
     },
+
+    getDefaultProps: function () {
+        return {showY: false};
+    },
+
 
     getInitialState: function () {
         return {chart: []};
@@ -57,8 +63,8 @@ module.exports = React.createClass({
         var sectionId = this.props.sectionId;
         var panelId = sectionId + "-panel";
         return (
-            <div id={panelId} className="panel panel-default">
-                <div className="panel-heading">{this.props.heading}</div>
+            <div id={panelId}>
+                <h3 className="sectionHeading">{this.props.heading}</h3>
                 <div className="panel-body">
                     <div id={sectionId}></div>
                 </div>
@@ -83,7 +89,8 @@ module.exports = React.createClass({
                 keys: {
                     x: 'title',
                     value: ['value']
-                },
+                }
+                ,
                 color: function () {
                     var i = idx++;
                     var item = (i % total);
@@ -94,6 +101,9 @@ module.exports = React.createClass({
                 x: {
                     type: 'category',
                     height: 40
+                },
+                y: {
+                    show: false
                 }
             },
             tooltip: {show: false},

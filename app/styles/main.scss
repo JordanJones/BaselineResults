@@ -85,4 +85,12 @@ body {
         fill: #000 !important;
         font-size: $font-size-base;
     }
+
+    .domain, .tick > line {
+        visibility: hidden;
+    }
+}
+
+.sectionHeading {
+//    color: #08519c;
 }
