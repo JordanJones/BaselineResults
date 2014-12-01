@@ -17,15 +17,15 @@ module.exports = React.createClass({
     },
 
     componentWillMount: function () {
-        this.setStateWithName(this.props.name);
+        this.setStateWithName(this.props.name, this.props.title);
     },
 
     componentWillReceiveProps: function (next){
-        this.setStateWithName(next.name);
+        this.setStateWithName(next.name, next.title);
     },
 
-    setStateWithName: function (name) {
-        ResultModel.getAsyncState(name)
+    setStateWithName: function (name, title) {
+        ResultModel.getAsyncState(name, title)
             .then(this.setState.bind(this));
     },
 

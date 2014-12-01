@@ -5,22 +5,94 @@ var numeral = require('numeral');
 
 module.exports = (function () {
 
-    var DataCache = {};
-
     var ResultDataStore = {
 
         state: GetDefaultData('Unknown'),
+
+        cache: new Map(),
 
         getState: function () {
             return this.state;
         },
 
-        getAsyncState: function(name) {
+        getAsyncState: function(name, title) {
             return when
-                .promise(LoadData.bind(this, name))
+                .promise(LoadData.bind(this, name, title))
                 .then(ProcessData.bind(this))
                 .then(TryCacheData.bind(this))
                 .then(SetState.bind(this));
+        },
+
+        getRequestsPerSecondData: function () {
+            var results = {};
+            this.cache.forEach(function(val, key) {
+                results[key] = {
+                    name: key,
+                    title: val.title,
+                    value: val.summary.requests
+                };
+            });
+            return results;
+        },
+
+        getAverageLatencies: function () {
+            var results = {};
+            this.cache.forEach(function(val, key) {
+                results[key] = {
+                    name: key,
+                    title: val.title,
+                    value: val.summary.latency
+                };
+            });
+            return results;
+        },
+
+        getAverageIisCpuUsage: function () {
+            var results = {};
+            this.cache.forEach(function(val, key) {
+                results[key] = {
+                    name: key,
+                    title: val.title,
+                    value: parseFloat(val.summary.iis.avgCpu)
+                };
+            });
+            return results;
+        },
+
+        getAverageIisMemUsage: function () {
+            var results = {};
+            this.cache.forEach(function(val, key) {
+                results[key] = {
+                    name: key,
+                    title: val.title,
+                    value: parseFloat(val.summary.iis.avgMem)
+                };
+            });
+            return results;
+        },
+
+        getAverageSqlCpuUsage: function () {
+            var results = {};
+            this.cache.forEach(function(val, key) {
+                results[key] = {
+                    name: key,
+                    title: val.title,
+                    value: parseFloat(val.summary.sql.avgCpu)
+                };
+            });
+            return results;
+        },
+
+        getAverageSqlMemUsage: function () {
+            var results = {};
+            this.cache.forEach(function(val, key) {
+                results[key] = {
+                    name: key,
+                    title: val.title,
+                    value: parseFloat(val.summary.sql.avgMem)
+                };
+            });
+            return results;
         }
 
     };
@@ -33,12 +105,12 @@ module.exports = (function () {
         return this.getState();
     };
 
-    var LoadData = function(name, cb) {
-        if (DataCache[name] !== undefined) {
-            cb(DataCache[name]);
+    var LoadData = function(name, title, cb) {
+        if (this.cache.has(name)) {
+            cb(this.cache.get(name));
         }
         else {
-            var perfData = GetDefaultData(name);
+            var perfData = GetDefaultData(name, title);
 
             var url = 'data/' + name + '/Results.json?bust=' + (new Date()).getTime();
             $.get(url, function (data) {
@@ -52,8 +124,8 @@ module.exports = (function () {
     };
 
     var TryCacheData = function(data) {
-        if (data != null && data.raw != null && data.isProcessed && DataCache[data.name] === undefined) {
-            DataCache[data.name] = data;
+        if (data != null && data.raw != null && data.isProcessed && !this.cache.has(data.name)) {
+            this.cache.set(data.name, data);
         }
 
         return data;
@@ -78,6 +150,7 @@ module.exports = (function () {
     var ProcessSummaryData = function (rawSummary) {
         return {
             requests: parseFloat(numeral(rawSummary.http.reqs).format('0.00')),
+            latency: parseFloat(numeral(rawSummary.http.latency.avg).format('0.00')),
             iis: {
                 avgCpu: numeral(rawSummary.perf.avgCpu.iis / 100).format('0.00%'),
                 avgMem: numeral(rawSummary.perf.avgMem.iis).format('0.000 b')
@@ -115,9 +188,10 @@ module.exports = (function () {
         };
     };
 
-    function GetDefaultData (name) {
+    function GetDefaultData (name, title) {
         return {
             name: name,
+            title: title,
             cpu: {
                 label: name,
                 values: []
@@ -128,6 +202,7 @@ module.exports = (function () {
             },
             summary: {
                 requests: 0,
+                latency: 0,
                 iis: {avgCpu: 0, avgMem: 0},
                 sql: {avgCpu: 0, avgMem: 0}
             },

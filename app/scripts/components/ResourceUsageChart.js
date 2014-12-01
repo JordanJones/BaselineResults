@@ -4,6 +4,7 @@
 var React = require('react');
 var c3 = require('c3');
 var moment = require('moment');
+var Colors = require('../models/ColorModel');
 
 module.exports = React.createClass({
 
@@ -22,14 +23,14 @@ module.exports = React.createClass({
     },
 
     componentWillReceiveProps: function (props){
-        if (this.state.chart != null) {
+        if (this.state.chart != null && this.state.chart.destroy) {
             this.state.chart.destroy();
         }
         this._renderGraphic(props);
     },
 
     componentWillUnmount: function () {
-        if (this.state.chart != null) {
+        if (this.state.chart != null && this.state.chart.destroy) {
             this.state.chart.destroy();
         }
     },
@@ -47,6 +48,9 @@ module.exports = React.createClass({
     },
 
     _renderGraphic: function (props) {
+
+        var total = props.data.values.length;
+        var idx = 0;
         var chart = c3.generate({
             axis: {
                 x: {
@@ -69,6 +73,10 @@ module.exports = React.createClass({
                 keys: {
                     x: 'instance',
                     value: ['iis', 'sql']
+                },
+                names: {
+                    'iis': 'IIS',
+                    'sql': 'SQL'
                 },
                 type: 'line'
             },

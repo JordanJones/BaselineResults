@@ -38,7 +38,7 @@ body {
 
 @media (min-width: 992px) {
     body {
-        padding: 0 0 0 300px;
+        padding: 0 0 0 $navmenu-width;
     }
     .navmenu {
         padding-top: 0;
@@ -76,5 +76,13 @@ body {
 @media (max-width: $screen-xs) {
     .centering {
         width: 100%;
+    }
+}
+
+
+.summary-container {
+    text.c3-text, tspan {
+        fill: #000 !important;
+        font-size: $font-size-base;
     }
 }
