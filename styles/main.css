@@ -7460,6 +7460,10 @@ body {
   background-color: #222;
 }
 
+.overview-container {
+  padding-top: 60px;
+}
+
 .summary-container text.c3-text, .summary-container tspan {
   fill: #000 !important;
   font-size: 14px;
@@ -7470,6 +7474,16 @@ body {
 
 .summary-section {
   margin-bottom: 75px;
+}
+
+.code-row {
+  margin-bottom: 10px;
+}
+
+.code-link {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /*# sourceMappingURL=main.css.map */
