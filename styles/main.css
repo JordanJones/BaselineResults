@@ -6928,7 +6928,7 @@ button.close {
 
 .navmenu,
 .navbar-offcanvas {
-  width: 300px;
+  width: 200px;
   height: 100%;
   border-width: 1px;
   border-style: solid;
@@ -7438,7 +7438,7 @@ body {
 }
 @media (min-width: 992px) {
   body {
-    padding: 0 0 0 300px;
+    padding: 0 0 0 200px;
   }
 
   .navmenu {
@@ -7476,6 +7476,10 @@ body {
   .centering {
     width: 100%;
   }
+}
+.summary-container text.c3-text, .summary-container tspan {
+  fill: #000 !important;
+  font-size: 14px;
 }
 
 /*# sourceMappingURL=main.css.map */
