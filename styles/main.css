@@ -7481,5 +7481,8 @@ body {
   fill: #000 !important;
   font-size: 14px;
 }
+.summary-container .domain, .summary-container .tick > line {
+  visibility: hidden;
+}
 
 /*# sourceMappingURL=main.css.map */
