@@ -28,7 +28,9 @@ module.exports = (function () {
             if (items.length == 0) return;
 
             when.settle(items.map(function (x) { return this.getAsyncState(x.name, x.title); }.bind(this)))
-                .then(function () { /* do nothing */ });
+                .then(function () {
+                    /* do nothing */
+                }.bind(this));
         },
 
         getRequestsPerSecondData: function () {

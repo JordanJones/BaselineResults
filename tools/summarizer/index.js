@@ -13,9 +13,8 @@ module.exports = function () {
 
         try {
             var data = JSON.parse(String(file.contents));
-            var httpSummary = _.chain(data.http)
-                .reduce(ReduceHttpSummary, HTTPSUMMARY)
-                .value();
+
+            var httpSummary = ReduceHttpSummary(data.http, HTTPSUMMARY);
 
             var perfSummary = ReducePerfSummary(data.perf, {
                 values: [],
@@ -53,17 +52,21 @@ var HTTPSUMMARY = {
     }
 };
 
-function ReduceHttpSummary(ctx, item, idx) {
-    ctx.reqs = (ctx.reqs + item.reqs) / (idx + 1);
-    ctx.total += item.total;
-    ctx.latency.avg = (ctx.latency.avg + item.latency.avg) / (idx + 1);
-    ctx.latency.std = (ctx.latency.std + item.latency.std) / (idx + 1);
-    ctx.latency.max = Math.max(ctx.latency.max, item.latency.max);
-    ctx.latency.maxAvg = (ctx.latency.max + item.latency.max) / (idx + 1);
-    ctx.errors.connect = (ctx.errors.connect + item.errors.connect) / (idx + 1);
-    ctx.errors.read = (ctx.errors.read + item.errors.read) / (idx + 1);
-    ctx.errors.write = (ctx.errors.write + item.errors.write) / (idx + 1);
-    ctx.errors.timeout = (ctx.errors.timeout + item.errors.timeout) / (idx + 1);
+function ReduceHttpSummary(items, ctx) {
+    var size = items.length;
+
+    ctx.reqs = _.reduce(items, function (x, y) { return x + y.reqs; }, 0) / size;
+    ctx.total = _.reduce(items, function (x, y) { return x + y.total; }, 0) / size;
+
+    ctx.latency.avg = _.reduce(items, function (x, y) { return x + y.latency.avg; }, 0) / size;
+    ctx.latency.std = _.reduce(items, function (x, y) { return x + y.latency.std; }, 0) / size;
+    ctx.latency.max = _.reduce(items, function (x, y) { return x + y.latency.max; }, 0) / size;
+
+    ctx.errors.connect = _.reduce(items, function (x, y) { return x + y.errors.connect; }, 0) / size;
+    ctx.errors.read = _.reduce(items, function (x, y) { return x + y.errors.read; }, 0) / size;
+    ctx.errors.write = _.reduce(items, function (x, y) { return x + y.errors.write; }, 0) / size;
+    ctx.errors.timeout = _.reduce(items, function (x, y) { return x + y.errors.timeout; }, 0) / size;
+
     return ctx;
 }
 
@@ -117,17 +120,33 @@ function ReducePerfSummary(items, ctx) {
         r.iisCpu = _.reduce(c, function (x, y) { return x + y.iisCpu; }, 0) / size;
         r.sqlMem = _.reduce(c, function (x, y) { return x + y.sqlMem; }, 0) / size;
         r.sqlCpu = _.reduce(c, function (x, y) { return x + y.sqlCpu; }, 0) / size;
+
+        r.iisCpu = AdjustCpuUsage(r.iisCpu);
+        r.sqlCpu = AdjustCpuUsage(r.sqlCpu);
     });
 
     return ctx;
 }
 
 function AveragePerfData(items, ctx) {
-    var c = _.flatten(items);
+    var c = [];
+    items.forEach(function (item) {
+        item.forEach(function (x) {
+            c.push(x);
+        });
+    });
     var size = c.length;
 
     ctx.avgMem.iis = _.reduce(c, function (x, y) { return x + y.iisMem; }, 0) / size;
     ctx.avgCpu.iis = _.reduce(c, function (x, y) { return x + y.iisCpu; }, 0) / size;
     ctx.avgMem.sql = _.reduce(c, function (x, y) { return x + y.sqlMem; }, 0) / size;
     ctx.avgCpu.sql = _.reduce(c, function (x, y) { return x + y.sqlCpu; }, 0) / size;
+
+
+    ctx.avgCpu.iis = AdjustCpuUsage(ctx.avgCpu.iis);
+    ctx.avgCpu.sql = AdjustCpuUsage(ctx.avgCpu.sql);
+}
+
+function AdjustCpuUsage(num) {
+    return num / 4;
 }

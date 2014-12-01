@@ -59,27 +59,6 @@ body {
     }
 }
 
-.container-centering {
-    display: table;
-    padding: 0;
-    width: 100%;
-}
-
-.row-centering {
-}
-
-.centering {
-    float: none;
-    width: 300px;
-    margin: 0 auto;
-}
-@media (max-width: $screen-xs) {
-    .centering {
-        width: 100%;
-    }
-}
-
-
 .summary-container {
     text.c3-text, tspan {
         fill: #000 !important;
@@ -91,6 +70,6 @@ body {
     }
 }
 
-.sectionHeading {
-//    color: #08519c;
+.summary-section {
+    margin-bottom: 75px;
 }

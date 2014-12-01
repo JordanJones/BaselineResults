@@ -11,14 +11,9 @@ module.exports = React.createClass({
     propTypes: {
         sectionId: React.PropTypes.string.isRequired,
         heading: React.PropTypes.string.isRequired,
-        showY: React.PropTypes.bool,
         items: React.PropTypes.array.isRequired,
         itemLoader: React.PropTypes.func.isRequired,
         stateLoader: React.PropTypes.func.isRequired
-    },
-
-    getDefaultProps: function () {
-        return {showY: false};
     },
 
 
@@ -63,7 +58,7 @@ module.exports = React.createClass({
         var sectionId = this.props.sectionId;
         var panelId = sectionId + "-panel";
         return (
-            <div id={panelId}>
+            <div id={panelId} className="summary-section">
                 <h3 className="sectionHeading">{this.props.heading}</h3>
                 <div className="panel-body">
                     <div id={sectionId}></div>
@@ -103,7 +98,8 @@ module.exports = React.createClass({
                     height: 40
                 },
                 y: {
-                    show: false
+                    show: false,
+                    padding: {bottom: 0}
                 }
             },
             tooltip: {show: false},

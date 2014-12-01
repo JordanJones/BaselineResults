@@ -35,34 +35,30 @@ module.exports = React.createClass({
                 <SummarySection
                     sectionId="sum-3"
                     heading="Average IIS Cpu Usage %"
-                    showY="true"
                     items={summaryData}
                     itemLoader={itemLoader}
                     stateLoader={ResultModel.getAverageIisCpuUsage.bind(ResultModel)}
                 />
 
                 <SummarySection
-                    sectionId="sum-4"
-                    heading="Average IIS Memory Usage"
-                    showY="true"
-                    items={summaryData}
-                    itemLoader={itemLoader}
-                    stateLoader={ResultModel.getAverageIisMemUsage.bind(ResultModel)}
-                />
-
-                <SummarySection
                     sectionId="sum-5"
                     heading="Average SQL Server Cpu Usage %"
-                    showY="true"
                     items={summaryData}
                     itemLoader={itemLoader}
                     stateLoader={ResultModel.getAverageSqlCpuUsage.bind(ResultModel)}
                 />
 
                 <SummarySection
+                    sectionId="sum-4"
+                    heading="Average IIS Memory Usage (MB)"
+                    items={summaryData}
+                    itemLoader={itemLoader}
+                    stateLoader={ResultModel.getAverageIisMemUsage.bind(ResultModel)}
+                />
+
+                <SummarySection
                     sectionId="sum-6"
-                    heading="Average SQL Server Memory Usage"
-                    showY="true"
+                    heading="Average SQL Server Memory Usage (MB)"
                     items={summaryData}
                     itemLoader={itemLoader}
                     stateLoader={ResultModel.getAverageSqlMemUsage.bind(ResultModel)}
