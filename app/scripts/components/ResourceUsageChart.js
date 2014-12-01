@@ -4,12 +4,10 @@
 var React = require('react');
 var c3 = require('c3');
 var moment = require('moment');
-var Colors = require('../models/ColorModel');
 
 module.exports = React.createClass({
 
     propTypes: {
-        heading: React.PropTypes.string.isRequired,
         xLabel: React.PropTypes.string.isRequired,
         yLabel: React.PropTypes.string.isRequired,
         chartId: React.PropTypes.string.isRequired,
@@ -39,7 +37,7 @@ module.exports = React.createClass({
         var panelId = this.props.chartId + "-panel";
         return (
             <div id={panelId} className="panel panel-default">
-                <div className="panel-heading">{this.props.heading}</div>
+                {this.props.children}
                 <div className="panel-body">
                     <div id={this.props.chartId}></div>
                 </div>
@@ -49,8 +47,6 @@ module.exports = React.createClass({
 
     _renderGraphic: function (props) {
 
-        var total = props.data.values.length;
-        var idx = 0;
         var chart = c3.generate({
             axis: {
                 x: {

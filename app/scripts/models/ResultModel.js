@@ -23,6 +23,14 @@ module.exports = (function () {
                 .then(SetState.bind(this));
         },
 
+        preload: function (items) {
+            items = items || [];
+            if (items.length == 0) return;
+
+            when.settle(items.map(function (x) { return this.getAsyncState(x.name, x.title); }.bind(this)))
+                .then(function () { /* do nothing */ });
+        },
+
         getRequestsPerSecondData: function () {
             var results = {};
             this.cache.forEach(function(val, key) {
@@ -132,15 +140,15 @@ module.exports = (function () {
     };
 
     var ProcessData = function(data) {
-        if (data.raw != null && !data.isProcessed && Array.isArray(data.raw.summary.perf.values)) {
-            var raw = data.raw.summary.perf.values;
+        if (data.raw != null && !data.isProcessed && Array.isArray(data.raw.perf.values)) {
+            var raw = data.raw.perf.values;
             var cpuCols = data.cpu.values || [];
             var memCols = data.mem.values || [];
 
             raw.forEach(ProcessPerfData.bind(this, cpuCols, memCols));
             data.cpu.values = cpuCols;
             data.mem.values = memCols;
-            data.summary = ProcessSummaryData(data.raw.summary);
+            data.summary = ProcessSummaryData(data.raw);
             data.isProcessed = true;
         }
 
@@ -203,8 +211,8 @@ module.exports = (function () {
             summary: {
                 requests: 0,
                 latency: 0,
-                iis: {avgCpu: 0, avgMem: 0},
-                sql: {avgCpu: 0, avgMem: 0}
+                iis: {avgCpu: '', avgMem: ''},
+                sql: {avgCpu: '', avgMem: ''}
             },
             raw: null,
             isProcessed: false

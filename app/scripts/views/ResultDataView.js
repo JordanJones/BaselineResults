@@ -2,6 +2,7 @@
 'use strict';
 var React = require('react');
 var ResourceUsageChart = require('../components/ResourceUsageChart');
+var ResourceUsageHeader = require('../components/ResourceUsageHeader');
 var PerformanceResult = require('../components/PerformanceResult');
 var ResultModel = require('../models/ResultModel');
 
@@ -41,18 +42,21 @@ module.exports = React.createClass({
                     data={this.state.summary} />
 
                 <ResourceUsageChart
-                    heading="Cpu Graph"
                     chartId={cpuId}
                     data={this.state.cpu}
                     yLabel="Percent"
-                    xLabel="Time"/>
+                    xLabel="Time">
+                    <ResourceUsageHeader text="Cpu %" iis={this.state.summary.iis.avgCpu} sql={this.state.summary.sql.avgCpu} />
+                </ResourceUsageChart>
 
                 <ResourceUsageChart
                     heading="Memory Graph"
                     chartId={memId}
                     data={this.state.mem}
                     yLabel="MB"
-                    xLabel="Time"/>
+                    xLabel="Time">
+                    <ResourceUsageHeader text="Memory Usage" iis={this.state.summary.iis.avgMem} sql={this.state.summary.sql.avgMem} />
+                </ResourceUsageChart>
             </div>
         );
     }

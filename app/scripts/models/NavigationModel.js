@@ -12,5 +12,9 @@ module.exports = {
         {route: 'Result', name: 'WebApiEntityFrameworkCodeFirst', title: 'WebApi EF (Code First)'},
         {route: 'Result', name: 'WebApiLinq2Db', title: 'WebApi Linq2Db'},
         {route: 'Summary', name: 'Summary', title: 'Summary'}
-    ]
+    ],
+
+    getResultRoutes: function () {
+        return this.routes.filter(x => x.route === 'Result');
+    }
 };

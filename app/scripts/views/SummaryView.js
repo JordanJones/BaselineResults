@@ -9,15 +9,7 @@ var ResultModel = require('../models/ResultModel');
 module.exports = React.createClass({
 
     render: function () {
-        var summaryData = [];
-        NavigationModel.routes.forEach(function(x) {
-            if (x.route === 'Result') {
-                summaryData.push({
-                    name: x.name,
-                    title: x.title
-                });
-            }
-        });
+        var summaryData = NavigationModel.getResultRoutes();
 
         var itemLoader = ResultModel.getAsyncState.bind(ResultModel);
 
@@ -35,7 +27,7 @@ module.exports = React.createClass({
 
                 <SummarySection
                     sectionId="sum-2"
-                    heading="Average Latency"
+                    heading="Average Latency (milliseconds)"
                     items={summaryData}
                     itemLoader={itemLoader}
                     stateLoader={ResultModel.getAverageLatencies.bind(ResultModel)}
@@ -59,7 +51,7 @@ module.exports = React.createClass({
 
                 <SummarySection
                     sectionId="sum-5"
-                    heading="Average SQL Cpu Usage"
+                    heading="Average SQL Server Cpu Usage"
                     items={summaryData}
                     itemLoader={itemLoader}
                     stateLoader={ResultModel.getAverageSqlCpuUsage.bind(ResultModel)}
@@ -67,7 +59,7 @@ module.exports = React.createClass({
 
                 <SummarySection
                     sectionId="sum-6"
-                    heading="Average SQL Memory Usage"
+                    heading="Average SQL Server Memory Usage"
                     items={summaryData}
                     itemLoader={itemLoader}
                     stateLoader={ResultModel.getAverageSqlMemUsage.bind(ResultModel)}

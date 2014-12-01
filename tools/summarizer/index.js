@@ -23,12 +23,11 @@ module.exports = function () {
                 avgMem: {iis: 0, sql: 0}
             });
 
-            data['summary'] = {
+            file.contents = new Buffer(JSON.stringify({
+                name: data.name,
                 http: httpSummary,
                 perf: perfSummary
-            };
-
-            file.contents = new Buffer(JSON.stringify(data));
+            }));
             cb(null, file);
         }
         catch (err) {
