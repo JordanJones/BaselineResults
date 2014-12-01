@@ -59,6 +59,10 @@ body {
     }
 }
 
+.overview-container {
+    padding-top: 60px;
+}
+
 .summary-container {
     text.c3-text, tspan {
         fill: #000 !important;
@@ -72,4 +76,12 @@ body {
 
 .summary-section {
     margin-bottom: 75px;
+}
+
+.code-row {
+    margin-bottom: 10px;
+}
+
+.code-link {
+    @include text-overflow;
 }
