@@ -20,7 +20,9 @@ var VendorLibs = [
     {name: 'c3', file: './app/bower_components/c3/c3.min.js', depends: ['d3']},
     {name: 'bootstrap', file: './app/bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js', depends: ['jquery']},
     {name: 'jasny-bootstrap', file: './app/bower_components/jasny-bootstrap/dist/js/jasny-bootstrap.js', depends: ['jquery', 'bootstrap']},
-    {name: 'numeral', file: './node_modules/numeral/numeral.js'}
+    {name: 'numeral', file: './node_modules/numeral/numeral.js'},
+    {name: 'es6-map', file: './node_modules/es6-map/index.js'},
+    {name: 'object-assign', file: './node_modules/object-assign/index.js'}
 ];
 
 gulp.task('vendor', function () {

@@ -168,4 +168,7 @@ gulp.task('watch', ['build', 'serve'], function () {
 
     // Watch tool files
     gulp.watch('tools/summarizer/index.js', ['results']);
+
+    // Vendor
+    gulp.watch('tasks/vendor.js', ['vendor', 'bundle']);
 });

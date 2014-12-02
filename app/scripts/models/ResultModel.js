@@ -2,6 +2,7 @@
 var $ = require('jquery');
 var when = require('when');
 var numeral = require('numeral');
+var Map = require('es6-map');
 
 module.exports = (function () {
 

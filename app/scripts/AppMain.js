@@ -1,5 +1,8 @@
 /** @jsx React.DOM */
 'use strict';
+if (!Object.assign) {
+    Object.assign = require('object-assign');
+}
 var $ = window.$ = window.jQuery = require('jquery');
 var React = window.React = require('react');
 require('d3');
