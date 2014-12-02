@@ -25,14 +25,6 @@ module.exports = React.createClass({
                 />
 
                 <SummarySection
-                    sectionId="sum-2"
-                    heading="Average Latency (milliseconds)"
-                    items={summaryData}
-                    itemLoader={itemLoader}
-                    stateLoader={ResultModel.getAverageLatencies.bind(ResultModel)}
-                />
-
-                <SummarySection
                     sectionId="sum-3"
                     heading="Average IIS Cpu Usage %"
                     items={summaryData}
